@@ -483,10 +483,7 @@ func findDNSRecord(d *schema.ResourceData, m interface{}) error {
 	log.Println("cont1: ", cont1)
 
 	d.SetId(fmt.Sprintf("%v", cont1.S("id").String()))
-
-	log.Println("INSIDE READ ID value: ", cont1.S("id").String())
 	d.Set("name", StripQuotes(cont1.S("name").String()))
-	log.Println("Inside read ID name value: ", StripQuotes(cont1.S("name").String()))
 
 	str := StripQuotes(cont1.S("value").String())
 
