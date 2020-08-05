@@ -277,7 +277,12 @@ func resourceManagedDNSRecordActionsRead(d *schema.ResourceData, m interface{}) 
 	d.SetId(fmt.Sprintf("%v", cont1.S("id").String()))
 
 	log.Println("INSIDE READ ID value: ", cont1.S("id").String())
-	d.Set("name", StripQuotes(cont1.S("name").String()))
+	hostName := StripQuotes(cont1.S("name").String())
+	if len(hostName) == 0 {
+		hostName = "@"
+	}
+
+	d.Set("name", hostName)
 	log.Println("Inside read ID name value: ", StripQuotes(cont1.S("name").String()))
 
 	str := StripQuotes(cont1.S("value").String())
@@ -437,7 +442,7 @@ func resourceMangagedDNSRecordActionsImport(d *schema.ResourceData, m interface{
 
 		hostName := strParts[1]
 		hostName = strings.Replace(hostName, "@", "", -1)
-		d.Set("name", strParts[1])
+		d.Set("name", hostName)
 
 		log.Printf("Inside Record Import: Found Domain, looking up Record '%s', type '%s' (domain ID: '%s')\n", strParts[1], strParts[2], importDomain.Id())
 
